@@ -14,6 +14,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   bool onLastPage = false;
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _controller,
             onPageChanged: (index) {
               setState(() {
+                currentIndex = index;
                 onLastPage = index == 2;
               });
             },
@@ -84,7 +86,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                   child: Text(
                     "BACK",
-                    style: TextStyle(color: ColorConstants.MainWhite),
+                    style: TextStyle(
+                      color:
+                          currentIndex == 0
+                              ? Colors.grey
+                              : ColorConstants.MainWhite,
+                    ),
                   ),
                 ),
                 ElevatedButton(

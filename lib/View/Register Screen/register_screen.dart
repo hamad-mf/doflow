@@ -1,38 +1,39 @@
-import 'dart:developer';
-
 import 'package:doflow/Utils/color_contstants.dart';
-import 'package:doflow/View/Home%20Screen/home_screen.dart';
-import 'package:doflow/View/Register%20Screen/register_screen.dart';
-import 'package:doflow/View/Widgets/custom_bottom_navbar_screen.dart';
+import 'package:doflow/View/Login%20Screen/login_screen.dart';
 import 'package:doflow/View/Widgets/custom_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _CpasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isButtonEnabled = false;
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
     super.initState();
     _usernameController.addListener(_validateForm);
     _passwordController.addListener(_validateForm);
+    _CpasswordController.addListener(_validateForm);
   }
 
   void _validateForm() {
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
+    final cPassword = _CpasswordController.text;
 
-    final isValid = username.isNotEmpty && password.length >= 6;
+    final isValid =
+        username.isNotEmpty && password.length >= 6 && password == cPassword;
 
     if (isButtonEnabled != isValid) {
       setState(() {
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               SizedBox(height: 20.h),
               Text(
-                "Login",
+                "Register",
                 style: TextStyle(
                   color: ColorConstants.MainWhite,
                   fontWeight: FontWeight.bold,
@@ -127,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 8.h),
               TextFormField(
-                obscureText: true,
+                obscureText: !_isPasswordVisible,
                 controller: _passwordController,
                 style: TextStyle(color: Colors.white),
                 cursorColor: Colors.white,
@@ -149,7 +150,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.white.withOpacity(0.5),
                     ),
                   ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                  ),
                 ),
+
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your password';
@@ -160,121 +174,91 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 25.h),
+              Text(
+                "Confirm Password",
+                style: TextStyle(
+                  color: ColorConstants.MainWhite,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              TextFormField(
+                obscureText: !_isPasswordVisible,
+                controller: _CpasswordController,
+                style: TextStyle(color: Colors.white),
+                cursorColor: Colors.white,
+                decoration: InputDecoration(
+                  hintText: "• • • • • • • • •",
+                  hintStyle: TextStyle(color: ColorConstants.HintText),
+                  filled: true,
+                  fillColor: ColorConstants.TextfieldFill,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: ColorConstants.TextfieldBorder,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      // ignore: deprecated_member_use
+                      color: Colors.white.withOpacity(0.5),
+                    ),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  if (value.length < 6) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
               SizedBox(height: 69.h),
               CustomLoginButton(
                 isEnabled: isButtonEnabled,
-                name: "Login",
+                name: "Register",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Your login logic here
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CustomBottomNavbarScreen(),
-                      ),
-                    );
                   }
                 },
               ),
-              SizedBox(height: 30.h),
-              Row(
-                children: [
-                  Expanded(child: Divider(color: Colors.grey, thickness: 1.h)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0.w),
-                    child: Text("or", style: TextStyle(color: Colors.grey)),
-                  ),
-                  Expanded(child: Divider(color: Colors.grey, thickness: 1.h)),
-                ],
-              ),
-              SizedBox(height: 29.h),
-              InkWell(
-                onTap: () {
-                  log("implement later");
-                },
-                child: Container(
-                  height: 48.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: ColorConstants.BlueButton,
-                      width: 1.5.w,
-                    ),
-                  ),
 
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/google_logo.png',
-                          scale: 0.9,
-                        ),
-                        Text(
-                          "Login with Google",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 29.h),
-              InkWell(
-                onTap: () {
-                  log("implement later");
-                },
-                child: Container(
-                  height: 48.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: ColorConstants.BlueButton,
-                      width: 1.5.w,
-                    ),
-                  ),
-
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/apple_logo.png', scale: 0.4),
-                        SizedBox(width: 4.w),
-                        Text(
-                          "Login with Apple",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
               Spacer(),
               Center(
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
                   },
                   child: RichText(
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Don\'t have an account? ',
+                          text: 'Already have an account? ',
                           style: TextStyle(color: Colors.white),
                         ),
                         TextSpan(
-                          text: 'Register',
+                          text: 'login',
                           style: TextStyle(
                             color: ColorConstants.MainWhite,
                             fontWeight: FontWeight.bold,
@@ -285,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 45.w),
+              SizedBox(height: 65.w),
             ],
           ),
         ),
