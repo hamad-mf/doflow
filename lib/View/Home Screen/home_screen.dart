@@ -1,5 +1,6 @@
 import 'package:doflow/Utils/color_contstants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             child: CircleAvatar(
               radius: 21,
               backgroundImage: NetworkImage(
-                'https://i.ibb.co/4ZW5gcpn/image.png',
+                'https://images.pexels.com/photos/2128807/pexels-photo-2128807.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
               ),
               backgroundColor: ColorConstants.MainWhite,
             ),
@@ -33,14 +34,33 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(child: Image.asset('assets/images/no_tasks_home.png')),
-          Center(
-            child: Text("data"),
-          )
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(height: 110.h),
+
+            Image.asset('assets/images/no_tasks_home.png'),
+            Text(
+              "What do you want to do today?",
+
+              style: TextStyle(
+                fontSize: 20.sp,
+                // ignore: deprecated_member_use
+                color: ColorConstants.MainWhite.withOpacity(0.87),
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Text(
+              "Tap + to add your tasks",
+
+              style: TextStyle(
+                fontSize: 16.sp,
+                // ignore: deprecated_member_use
+                color: ColorConstants.MainWhite.withOpacity(0.87),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
